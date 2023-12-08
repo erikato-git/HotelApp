@@ -1,4 +1,7 @@
+using Data;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Polly;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,34 +34,9 @@ builder.Services.AddDbContext<DataContext>(options =>
         {
             options.UseNpgsql(builder.Configuration["ConnectionStrings:ProductionConnection"]);
         }
-        // Heroku
-        else
-        {
-            // Use connection string provided at runtime by Heroku.
-            var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-            if(!string.IsNullOrEmpty(connUrl))
-            {
-                // Parse connection URL to connection string for Npgsql
-                connUrl = connUrl.Replace("postgres://", string.Empty);
-                var pgUserPass = connUrl.Split("@")[0];
-                var pgHostPortDb = connUrl.Split("@")[1];
-                var pgHostPort = pgHostPortDb.Split("/")[0];
-                var pgDb = pgHostPortDb.Split("/")[1];
-                var pgUser = pgUserPass.Split(":")[0];
-                var pgPass = pgUserPass.Split(":")[1];
-                var pgHost = pgHostPort.Split(":")[0];
-                var pgPort = pgHostPort.Split(":")[1];
-
-                connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
-
-                options.UseNpgsql(connStr);
-            }
-        }
     }
 });
 
-builder.Services.AddScoped<IWeatherForecast, WeatherForecastRepository>();
 
 builder.Services.AddCors(options =>
 {
@@ -76,7 +54,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Ensure postgres builds the db when running the docker-container
-using (var scope = app.Services.CreateScope())
+/* using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
@@ -92,7 +70,14 @@ using (var scope = app.Services.CreateScope())
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred creating the DB.");
     }
-}
+} */
+
+var retryPolicy = Policy
+    .Handle<NpgsqlException>()
+    .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(10));
+
+retryPolicy.ExecuteAndCapture(() => DbInitializer.InitDb(app));
+
 
 // --- Security ---
 
