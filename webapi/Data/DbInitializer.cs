@@ -19,6 +19,7 @@ public class DbInitializer
         if(context.Hotels.Any())
         {
             Console.WriteLine("Already have data - no need for seed");
+            return;
         }
 
         // 1. Mockaroo: generate Json-file, 2. ChatGPT: translate to C#

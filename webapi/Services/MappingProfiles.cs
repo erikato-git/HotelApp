@@ -7,9 +7,8 @@ public class MappingProfiles : AutoMapper.Profile
 {
     public MappingProfiles()
     {
-        CreateMap<HotelDto, Hotel>();
-            // .IncludeMembers(x => x.Rooms);
-            // .ReverseMap();
+        CreateMap<HotelDto, Hotel>()
+            .ReverseMap();
         CreateMap<RoomDto, Room>()
             .ReverseMap();
     }

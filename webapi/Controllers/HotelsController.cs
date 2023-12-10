@@ -38,15 +38,6 @@ public class HotelsController: ControllerBase
         
     }
 
-    [HttpGet("Entity/{id}")]
-    public async Task<ActionResult<Hotel>> GetHotelEntityById(Guid id)
-    {
-        var hotel = await _repo.GetHotelEntityById(id);
-
-        if(hotel == null) return NotFound();
-
-        return hotel;
-    }
 
     [Authorize]
     [HttpPost]
