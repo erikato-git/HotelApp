@@ -1,6 +1,7 @@
-namespace Models;
 
-public class Hotel
+namespace DTOs;
+
+public class HotelDto
 {
     public Guid Id { get; set; }
     public string HotelName { get; set; }
@@ -13,5 +14,5 @@ public class Hotel
     public string CreatedBy { get; set; }
 
     // Nav
-    public ICollection<Room> Rooms { get; set; } = new List<Room>();
+    public ICollection<RoomDto> Rooms { get; set; } = new List<RoomDto>();
 }

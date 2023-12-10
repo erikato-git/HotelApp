@@ -35,6 +35,7 @@ public class DbInitializer
                 Stars = 1,
                 Description = "Ischiocapsular ligament sprain of unspecified hip, subsequent encounter",
                 BackgroundImage = "http://dummyimage.com/144x100.png/5fa2dd/ffffff",
+                CreatedBy = "Admin",
                 Rooms = new List<Room>
                 {
                     new Room
@@ -55,7 +56,7 @@ public class DbInitializer
                     }
                 }
             },
-                        new Hotel
+            new Hotel
             {
                 Id = Guid.Parse("23430db5-ab14-4638-b5e0-37c7dbe1fde6"),
                 HotelName = "Zboncak-Emmerich",
@@ -65,6 +66,7 @@ public class DbInitializer
                 Stars = 3,
                 Description = "Burn of first degree of wrist and hand",
                 BackgroundImage = "http://dummyimage.com/179x100.png/dddddd/000000",
+                CreatedBy = "Admin",
                 Rooms = new List<Room>
                 {
                     new Room
@@ -103,6 +105,7 @@ public class DbInitializer
                 Stars = 4,
                 Description = "Other specified injury of superficial vein at shoulder and upper arm level",
                 BackgroundImage = "http://dummyimage.com/158x100.png/dddddd/000000",
+                CreatedBy = "Admin",
                 Rooms = new List<Room>
                 {
                     new Room

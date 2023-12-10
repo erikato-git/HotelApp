@@ -7,6 +7,8 @@ namespace Data;
 // Add-migrations: dotnet ef migrations add [name]
 // Update database: dotnet ef database update
 
+// Connect to Postgresql extension: 1. connection-string, 2. choose 'WebApi'
+
 public class DataContext : DbContext
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options)

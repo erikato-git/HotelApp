@@ -1,7 +1,10 @@
 using Data;
+using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Polly;
+using Repository;
+using Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +15,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
+// Config repositories
+builder.Services.AddScoped<IHotelRepository,HotelRepository>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -53,25 +59,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Ensure postgres builds the db when running the docker-container
-/* using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        // Add 10 seconds delay to ensure the db server is up to accept connections
-        // This won't be needed in a real-world application.
-        System.Threading.Thread.Sleep(10000);
-        var context = services.GetRequiredService<DataContext>();
-        var created = context.Database.EnsureCreated();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred creating the DB.");
-    }
-} */
-
+// Seed db
 var retryPolicy = Policy
     .Handle<NpgsqlException>()
     .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(10));

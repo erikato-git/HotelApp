@@ -37,6 +37,9 @@ namespace webapi.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("text");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
