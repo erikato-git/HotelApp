@@ -38,6 +38,7 @@ public class HotelsController: ControllerBase
         
     }
 
+    // TODO: Create authentication to test authorized methods - look at IdentityServer (Neil Cummings) or Cookie-auth (Social Media App)
 
     [Authorize]
     [HttpPost]
